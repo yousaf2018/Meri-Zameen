@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,11 +21,14 @@ import android.widget.ImageView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 public class ImageAnalysis extends AppCompatActivity {
     ImageView imageView;
     Button select;
+    String imageBase64;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +123,15 @@ public class ImageAnalysis extends AppCompatActivity {
                 try {
                     InputStream stream = getContentResolver().openInputStream(resultUri);
                     Bitmap bitmap = BitmapFactory.decodeStream(stream);
-
-                    imageView.setImageBitmap(bitmap);
+                    //Encoding image to base 64
+                    ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream1);
+                    byte[] bytes = stream1.toByteArray();
+                    imageBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    //Decoding image to bitmap
+                    byte[] bytes1 = Base64.decode(imageBase64, Base64.DEFAULT);
+                    Bitmap bitmap1 = BitmapFactory.decodeByteArray(bytes1, 0, bytes1.length);
+                    imageView.setImageBitmap(bitmap1);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
