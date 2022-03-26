@@ -10,25 +10,45 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ImageAnalysis extends AppCompatActivity {
+    private static final String TAG = "Check";
     ImageView imageView;
-    Button select;
-    String imageBase64;
+    Button select, prediction;
+    TextView pValue;
+    String imageBase64 = "";
+    String url = "https://soil-analysis.herokuapp.com/predict";
+    DecimalFormat df = new DecimalFormat("#.#");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +56,8 @@ public class ImageAnalysis extends AppCompatActivity {
         getSupportActionBar().hide();
         imageView = findViewById(R.id.image);
         select = findViewById(R.id.selectButton);
+        prediction = findViewById(R.id.Prediction);
+        pValue = findViewById(R.id.PValue);
         //When user clicks on image
         imageView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -43,19 +65,25 @@ public class ImageAnalysis extends AppCompatActivity {
             public void onClick(View view) {
                 boolean pick = true;
                 if (pick == true){
-                    if(!checkCameraPermission()){
-                        requestCameraPermission();
-                    }
-                    else{
-                        PickImage();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if(!checkCameraPermission()){
+                            requestCameraPermission();
+                        }
+                        else{
+                            PickImage();
+                        }
                     }
                 }
                 else{
-                    if(!checkStoragePermission()){
-                        requestStoragePermission();
-                    }
-                    else{
-                        PickImage();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if(!checkStoragePermission()){
+                            requestStoragePermission();
+                        }
+                        else{
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                PickImage();
+                            }
+                        }
                     }
 
                 }
@@ -68,22 +96,68 @@ public class ImageAnalysis extends AppCompatActivity {
             public void onClick(View view) {
                 boolean pick = true;
                 if (pick == true){
-                    if(!checkCameraPermission()){
-                        requestCameraPermission();
-                    }
-                    else{
-                        PickImage();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if(!checkCameraPermission()){
+                            requestCameraPermission();
+                        }
+                        else{
+                            PickImage();
+                        }
                     }
                 }
                 else{
-                    if(!checkStoragePermission()){
-                        requestStoragePermission();
-                    }
-                    else{
-                        PickImage();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if(!checkStoragePermission()){
+                            requestStoragePermission();
+                        }
+                        else{
+                            PickImage();
+                        }
                     }
 
                 }
+            }
+        });
+        //When user clicks on prediction button
+        prediction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //API call
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    double data = (double) jsonObject.get("Prediction");
+                                    Log.i(TAG,"Pred-->"+ data);
+                                    pValue.setText(df.format(data)+"");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                                Toast.makeText(ImageAnalysis.this, error.getMessage(), Toast.LENGTH_SHORT);
+
+                            }
+                        }){
+                    @Override
+                    protected Map<String,String> getParams(){
+                        Map<String, String> param = new HashMap<String, String>();
+                        param.put("inputValue", imageBase64);
+                        return param;
+                    }
+                };
+                RequestQueue queue = Volley.newRequestQueue(ImageAnalysis.this);
+                queue.add(stringRequest);
             }
         });
     }
@@ -128,6 +202,7 @@ public class ImageAnalysis extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream1);
                     byte[] bytes = stream1.toByteArray();
                     imageBase64 = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    Toast.makeText(ImageAnalysis.this, imageBase64, Toast.LENGTH_SHORT);
                     //Decoding image to bitmap
                     byte[] bytes1 = Base64.decode(imageBase64, Base64.DEFAULT);
                     Bitmap bitmap1 = BitmapFactory.decodeByteArray(bytes1, 0, bytes1.length);
