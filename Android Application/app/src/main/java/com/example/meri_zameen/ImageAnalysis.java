@@ -45,7 +45,7 @@ public class ImageAnalysis extends AppCompatActivity {
     private static final String TAG = "Check";
     ImageView imageView;
     Button select, prediction;
-    TextView pValue;
+    TextView pValue, pHValue, omValue, ecValue;
     String imageBase64 = "";
     String url = "https://soil-analysis.herokuapp.com/predict";
     DecimalFormat df = new DecimalFormat("#.#");
@@ -58,6 +58,9 @@ public class ImageAnalysis extends AppCompatActivity {
         select = findViewById(R.id.selectButton);
         prediction = findViewById(R.id.Prediction);
         pValue = findViewById(R.id.PValue);
+        pHValue = findViewById(R.id.pHValue);
+        omValue = findViewById(R.id.OMValue);
+        ecValue = findViewById(R.id.ECValue);
         //When user clicks on image
         imageView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -130,9 +133,16 @@ public class ImageAnalysis extends AppCompatActivity {
 
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    double data = (double) jsonObject.get("Prediction");
-                                    Log.i(TAG,"Pred-->"+ data);
-                                    pValue.setText(df.format(data)+"");
+                                    double P = (double) jsonObject.get("P");
+                                    double pH = (double) jsonObject.get("pH");
+                                    double OM = (double) jsonObject.get("OM");
+                                    double EC = (double) jsonObject.get("EC");
+
+                                    Log.i(TAG,"Pred-->"+ P);
+                                    pValue.setText(df.format(P)+"");
+                                    omValue.setText(df.format(OM)+"");
+                                    ecValue.setText(df.format(EC)+"");
+                                    pHValue.setText(df.format(pH)+"");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -152,7 +162,7 @@ public class ImageAnalysis extends AppCompatActivity {
                     @Override
                     protected Map<String,String> getParams(){
                         Map<String, String> param = new HashMap<String, String>();
-                        param.put("inputValue", imageBase64);
+                        param.put("inputImage", imageBase64);
                         return param;
                     }
                 };
