@@ -3,6 +3,7 @@ package com.example.meri_zameen;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,11 +46,13 @@ import java.util.Map;
 public class ImageAnalysis extends AppCompatActivity {
     private static final String TAG = "Check";
     ImageView imageView;
-    Button select, prediction;
+    Button select, prediction, report;
     TextView pValue, pHValue, omValue, ecValue;
     String imageBase64 = "";
+    CardView cardView;
+    ProgressBar progBar;
     String url = "https://soil-analysis.herokuapp.com/predict";
-    DecimalFormat df = new DecimalFormat("#.#");
+    DecimalFormat df = new DecimalFormat("0.0");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,12 @@ public class ImageAnalysis extends AppCompatActivity {
         pHValue = findViewById(R.id.pHValue);
         omValue = findViewById(R.id.OMValue);
         ecValue = findViewById(R.id.ECValue);
+        progBar = findViewById(R.id.progressBar);
+        cardView = findViewById(R.id.predictionCard);
+        report = findViewById(R.id.generateReport);
+        report.setVisibility(View.GONE);
+        cardView.setVisibility(View.GONE);
+        progBar.setVisibility(View.GONE);
         //When user clicks on image
         imageView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -125,6 +135,7 @@ public class ImageAnalysis extends AppCompatActivity {
         prediction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progBar.setVisibility(View.VISIBLE);
                 //API call
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
@@ -143,7 +154,11 @@ public class ImageAnalysis extends AppCompatActivity {
                                     omValue.setText(df.format(OM)+"");
                                     ecValue.setText(df.format(EC)+"");
                                     pHValue.setText(df.format(pH)+"");
+                                    report.setVisibility(View.VISIBLE);
+                                    cardView.setVisibility(View.VISIBLE);
+                                    progBar.setVisibility(View.GONE);
                                 } catch (JSONException e) {
+                                    progBar.setVisibility(View.GONE);
                                     e.printStackTrace();
                                 }
 
@@ -156,6 +171,7 @@ public class ImageAnalysis extends AppCompatActivity {
                             public void onErrorResponse(VolleyError error) {
 
                                 Toast.makeText(ImageAnalysis.this, error.getMessage(), Toast.LENGTH_SHORT);
+                                progBar.setVisibility(View.GONE);
 
                             }
                         }){
