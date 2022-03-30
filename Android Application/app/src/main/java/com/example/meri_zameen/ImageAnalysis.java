@@ -8,17 +8,25 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfRenderer;
 import android.icu.text.DecimalFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,8 +46,14 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -50,7 +64,17 @@ public class ImageAnalysis extends AppCompatActivity {
     TextView pValue, pHValue, omValue, ecValue;
     String imageBase64 = "";
     CardView cardView;
+    Bitmap bmp, scaledbmp;
     ProgressBar progBar;
+    public static final String SHRED_PREF = "sharedPrefs";
+    public static final String Save_P= "P";
+    public static final String Save_pH = "pH";
+    public static final String Save_OM = "OM";
+    public static final String Save_EC = "EC";
+    public static final String Save_Lang= "Lang";
+
+    String lang;
+    int pageWidth = 1200;
     String url = "https://soil-analysis.herokuapp.com/predict";
     DecimalFormat df = new DecimalFormat("0.0");
     @Override
@@ -58,6 +82,18 @@ public class ImageAnalysis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_analysis);
         getSupportActionBar().hide();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(SHRED_PREF, getApplicationContext().MODE_PRIVATE);
+        lang = pref.getString(Save_Lang, "Lang");
+       // setLanguage(lang);
+        LanguageManager languageManager=new LanguageManager(this);
+        if (lang.equals("Urdu")){
+            languageManager.updateResourse("ur");
+           // recreate();
+        }
+        else {
+            languageManager.updateResourse("en");
+            // recreate();
+        }
         imageView = findViewById(R.id.image);
         select = findViewById(R.id.selectButton);
         prediction = findViewById(R.id.Prediction);
@@ -71,6 +107,8 @@ public class ImageAnalysis extends AppCompatActivity {
         report.setVisibility(View.GONE);
         cardView.setVisibility(View.GONE);
         progBar.setVisibility(View.GONE);
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+        scaledbmp = Bitmap.createScaledBitmap(bmp, 1200, 518, false);
         //When user clicks on image
         imageView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -136,6 +174,7 @@ public class ImageAnalysis extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progBar.setVisibility(View.VISIBLE);
+                Toast.makeText(ImageAnalysis.this, "Process for predictions in progress", Toast.LENGTH_SHORT).show();
                 //API call
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
@@ -186,6 +225,39 @@ public class ImageAnalysis extends AppCompatActivity {
                 queue.add(stringRequest);
             }
         });
+        //When user clicks on generate pdf button
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String Phosphorous = pValue.getText().toString();
+                String PHValue = pHValue.getText().toString();
+                String OMValue = omValue.getText().toString();
+                String ECValue = ecValue.getText().toString();
+                if(Phosphorous != "0.0" && PHValue != "0.0" && OMValue != "0.0" && ECValue != "0.0"){
+                    Toast.makeText(ImageAnalysis.this, "Report generation in progress", Toast.LENGTH_LONG).show();
+                    generatePDF(Phosphorous, PHValue, OMValue, ECValue);
+                }
+                else{
+                    Toast.makeText(ImageAnalysis.this, "Error in report generation", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
+
+    private void setLanguage(String lang) {
+
+    }
+
+    private void generatePDF(String Phos, String PHValue, String OMValue, String ECValue){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHRED_PREF,MODE_PRIVATE);
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        editor.putString(Save_P,Phos);
+        editor.putString(Save_pH,PHValue);
+        editor.putString(Save_OM,OMValue);
+        editor.putString(Save_EC,ECValue);
+        editor.apply();
+        startActivity(new Intent(getApplicationContext(), ReportGeneration.class));
     }
 
     private void PickImage() {
