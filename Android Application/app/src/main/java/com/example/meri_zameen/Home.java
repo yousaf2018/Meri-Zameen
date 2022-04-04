@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
 public class Home extends AppCompatActivity {
-    ImageButton btn1;
-    Button btn2, eng, urdu;
+    ImageButton btnImage, btnSensor;
+    Button btnButton, eng, urdu, btnButton2;
     public static final String SHRED_PREF = "sharedPrefs";
     public static final String Save_Lang= "Lang";
     @Override
@@ -19,10 +20,12 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
-        btn1 = findViewById(R.id.btnImageAnalysis);
-        btn2 = findViewById(R.id.btnImageAnalysis2);
-        eng = findViewById(R.id.English);
-        urdu = findViewById(R.id.Urdu);
+        btnImage = findViewById(R.id.btnImageAnalysis);
+        btnButton = findViewById(R.id.btnImageAnalysis2);
+        btnButton2 = findViewById(R.id.btnSensorAnalysis2);
+        btnSensor = findViewById(R.id.btnSensorAnalysis);
+        eng = findViewById(R.id.english);
+        urdu = findViewById(R.id.urdu);
         LanguageManager languageManager=new LanguageManager(this);
         //When user click on Urdu Button for Language Change
         urdu.setOnClickListener(new View.OnClickListener() {
@@ -48,19 +51,36 @@ public class Home extends AppCompatActivity {
                 recreate();
             }
         });
-        //When user clicks on image
-        btn1.setOnClickListener(new View.OnClickListener() {
+        //When user clicks on image analysis
+        btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Home.this, ImageAnalysis.class);
                 startActivity(intent);
             }
         });
-        //When user clicks on button
-        btn2.setOnClickListener(new View.OnClickListener() {
+        //When user clicks on image analysis button
+        btnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Home.this, ImageAnalysis.class);
+                startActivity(intent);
+            }
+
+        });
+        //When user clicks on sensor analysis image
+        btnSensor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Login.class);
+                startActivity(intent);
+            }
+        });
+        //When user clicks on sensor analysis button
+        btnButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Login.class);
                 startActivity(intent);
             }
 
