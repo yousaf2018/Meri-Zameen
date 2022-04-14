@@ -72,4 +72,6 @@
     <string name="sav">Save values</string>
     <string name="saveText">Please enter unique id to save current values</string>
     <string name="k">Potassium</string>
+    <string name="show">Show</string>
+    <string name="savedValues">Saved records</string>
 </resources>

@@ -73,4 +73,6 @@
     <string name="sav">محفوظ کریں</string>
     <string name="saveText">قدریں ذخیرہ کرنے کے لیے منفرد ٹیگ درج کریں۔</string>
     <string name="k">پوٹاشیم</string>
+    <string name="show">دکھائیں</string>
+    <string name="savedValues">محفوظ شدہ ریکارڈز</string>
 </resources>
