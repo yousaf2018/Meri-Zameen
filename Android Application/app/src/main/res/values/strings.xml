@@ -74,4 +74,5 @@
     <string name="k">Potassium</string>
     <string name="show">Show</string>
     <string name="savedValues">Saved records</string>
+    <string name="search">Enter sample id for search</string>
 </resources>

@@ -46,13 +46,13 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnCon"
                     android:layout_weight="1"
-                    android:layout_marginLeft="2dp"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/red"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:textColor="@color/white"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
                     android:layout_marginBottom="5dp"
                     android:padding="10dp"
                     android:text="@string/con" />
@@ -66,6 +66,7 @@
                     android:background="@color/purple_500"
                     android:padding="10dp"
                     android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
                     android:gravity="center"
                     android:hint="@string/sensorIdText"
                     android:inputType="textEmailAddress"
@@ -133,6 +134,7 @@
                     android:background="@color/purple_500"
                     android:text="@string/para"
                     android:gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -145,6 +147,7 @@
                     android:gravity="center"
                     android:background="@color/purple_500"
                     android:text="@string/val"
+                    android:layout_marginRight="5dp"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -165,6 +168,7 @@
                     android:layout_weight="1"
                     android:background="#F6F8F8"
                     android:gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:text="@string/Phos"
                     android:textColor="@color/black" />
 
@@ -176,6 +180,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -195,6 +201,8 @@
                     android:layout_weight="1"
                     android:background="#F6F8F8"
                     android:gravity="center"
+                    android:layout_marginLeft="5dp"
+
                     android:text="@string/pH"
                     android:textColor="@color/black" />
 
@@ -206,6 +214,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -224,6 +234,8 @@
                     android:layout_weight="1"
                     android:background="#F6F8F8"
                     android:gravity="center"
+                    android:layout_marginLeft="5dp"
+
                     android:text="@string/k"
                     android:textColor="@color/black" />
 
@@ -235,6 +247,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -251,6 +265,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+
                     android:background="#F6F8F8"
                     android:gravity="center"
                     android:text="@string/Ec"
@@ -264,6 +280,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -281,6 +299,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+
                     android:background="#F6F8F8"
                     android:gravity="center"
                     android:text="@string/n"
@@ -294,6 +314,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -310,6 +332,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+
                     android:background="#F6F8F8"
                     android:gravity="center"
                     android:text="@string/h"
@@ -323,6 +347,8 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
+
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>
@@ -340,6 +366,8 @@
                     android:layout_weight="1"
                     android:background="#F6F8F8"
                     android:gravity="center"
+                    android:layout_marginLeft="5dp"
+
                     android:text="@string/temp"
                     android:textColor="@color/black" />
 
@@ -351,6 +379,7 @@
                     android:background="#FF9800"
                     android:padding="5dp"
                     android:text="0.0"
+                    android:layout_marginRight="5dp"
                     android:gravity="center"
                     android:textColor="@color/black" />
             </TableRow>

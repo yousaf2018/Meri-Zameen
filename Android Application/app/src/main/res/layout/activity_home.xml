@@ -51,9 +51,9 @@
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="180dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="30dp"
                 app:cardBackgroundColor="#3A3535"
                 app:cardCornerRadius="20dp">
 
@@ -64,9 +64,9 @@
 
                     <ImageButton
                         android:id="@+id/btnImageAnalysis"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        app:srcCompat="@drawable/aiimage" />
+                        app:srcCompat="@drawable/imageanalys" />
 
                     <Button
                         android:id="@+id/btnImageAnalysis2"
@@ -84,9 +84,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="460dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="30dp"
                 app:cardBackgroundColor="#3A3535"
                 app:cardCornerRadius="20dp">
 
@@ -99,7 +99,7 @@
                         android:id="@+id/btnSensorAnalysis"
                         android:layout_width="wrap_content"
                         android:layout_height="200dp"
-                        app:srcCompat="@drawable/sensor" />
+                        app:srcCompat="@drawable/image3" />
 
                     <Button
                         android:id="@+id/btnSensorAnalysis2"
